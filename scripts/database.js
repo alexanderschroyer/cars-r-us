@@ -4,6 +4,8 @@
 
 
 const database = {
+    orderBuilder: {},
+
     colors: [
         {id: 1, color: "Silver", price: 600},
         {id: 2, color: "Midnight Blue", price: 800},
@@ -27,6 +29,16 @@ const database = {
         {id: 2, type: "17-inch Pair Radial Black", price: 500},
         {id: 3, type: "18-inch Pair Spoke Silver", price: 800},
         {id: 4, type: "18-inch Pair Spoke Black", price: 900}
+    ],
+    customOrders: [
+        {
+            id: 1,
+            colorId: 1,
+            interiorId: 1,
+            technologyId: 1,
+            wheelId: 1,
+            timestamp: 1614659931693
+        }
     ]
 };
 
@@ -48,6 +60,42 @@ export const getWheels = () => {
 }
 
 export const getOrders = () => {
-    return database.customerOrders.map(order => ({...order}))
+    return database.customOrders.map(order => ({...order}))
 }
 
+export const setColor = (id) => {
+    database.orderBuilder.colorId = id
+}
+
+export const setInterior = (id) => {
+    database.orderBuilder.interiorId = id
+}
+
+export const setTechnology = (id) => {
+    database.orderBuilder.technologyId = id
+}
+
+export const setWheel = (id) => {
+    database.orderBuilder.wheelId = id
+}
+
+export const addCustomOrder = () => {
+    // Copy the current state of user choices
+    const newOrder = {...database.orderBuilder}
+
+    // Add a new primary key to the object
+    const lastIndex = database.customOrders.length - 1
+    newOrder.id = database.customOrders[lastIndex].id + 1
+
+    // Add a timestamp to the order
+    newOrder.timestamp = Date.now()
+
+    // Add the new order object to custom orders state
+    database.customOrders.push(newOrder)
+
+    // Reset the temporary state for user choices
+    database.orderBuilder = {}
+
+    // Broadcast a notification that permanent state has changed
+    document.dispatchEvent(new CustomEvent("stateChanged"))
+}

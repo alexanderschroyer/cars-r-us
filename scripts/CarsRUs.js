@@ -2,14 +2,19 @@ import { Colors } from "./colors.js"
 import { Interiors } from "./interiors.js"
 import { Technologies } from "./technologies.js"
 import { Wheels } from "./wheels.js"
-
-// const colors = getColors()
-// const interiors = getInteriors()
-// const technologies = getTechnologies()
-// const orders = getOrders()
+import { Orders } from "./orders.js"
+import { addCustomOrder } from "./database.js"
 
 
 
+document.addEventListener(
+    "click",
+    (event) => {
+        if (event.target.id === "orderButton") {
+            addCustomOrder()
+        }
+    }
+)
 
 
 
@@ -44,6 +49,7 @@ export const carsRus = () => {
 
         <article class="customOrders">
             <h2>Custom Car Orders</h2>
+            ${Orders()}
         </article>
     `
 }
